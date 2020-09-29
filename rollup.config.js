@@ -1,7 +1,24 @@
-import resolve from '@rollup/plugin-node-resolve'
+import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import { terser } from 'rollup-plugin-terser'
 
 export default [{
+    input: './src/y-indexeddb.js',
+    plugins: [
+      nodeResolve({
+        mainFields: ['module', 'browser', 'main']
+      }),
+      commonjs(),
+      terser()
+    ],
+    external: ['yjs'],
+    output: {
+      name: 'y-indexeddb',
+      extend: true,
+      file: 'dist/y-indexeddb.min.js',
+      format: 'iife'
+    }
+  },{
   input: './tests/index.js',
   output: {
     file: './dist/test.js',
@@ -9,7 +26,9 @@ export default [{
     sourcemap: true
   },
   plugins: [
-    resolve({ mainFields: ['module', 'browser', 'main'] }),
+    nodeResolve({
+      mainFields: ['module', 'browser', 'main']
+    }),
     commonjs()
   ]
 }, {
